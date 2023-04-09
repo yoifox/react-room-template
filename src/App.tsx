@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { CodeBlock, dracula } from 'react-code-blocks'
 
-export default class App extends Component {
+export default class App extends Component<{ mode: string }> {
     render() {
         return (
             <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", alignItems: "center", color: "white", whiteSpace: "pre" }}>

@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import "./Template.css";
 import { IconButton, Snackbar } from '@mui/material';
-import { Fullscreen } from '@mui/icons-material';
+import { Fullscreen, StickyNote2, Tv } from '@mui/icons-material';
 import App from './App';
 
 export default class Template extends Component {
 
     mounted = false;
     isMouseInsideContent = false;
-    state = { ready: false, fullscreen: false, showMessege: false };
+    state = { ready: false, fullscreen: false, showMessege: false, mode: "tv" };
 
     move = (e: MouseEvent) => {
         if (this.state.fullscreen) return;
@@ -29,15 +29,28 @@ export default class Template extends Component {
     resize = () => {
         if (this.state.fullscreen) return;
         const content = document.getElementById("content") as HTMLDivElement;
-        if(window.innerWidth >= window.innerHeight) {
-            content.style.width = (0.56 * window.innerWidth) + "px";
-            content.style.height = (0.28 * window.innerWidth) + "px";
-            content.style.transform = `translate(-${0.003 * window.innerWidth}px, -${0.01 * window.innerWidth}px)`;
-        }
-        else {
-            content.style.width = (0.28 * window.innerHeight) + "px";
-            content.style.height = (0.56 * window.innerHeight) + "px";
-            content.style.transform = `translate(-${0.01 * window.innerHeight}px, -${0.003 * window.innerHeight}px)`;
+        if(this.state.mode === "tv") {
+            if(window.innerWidth >= window.innerHeight) {
+                content.style.width = (0.56 * window.innerWidth) + "px";
+                content.style.height = (0.28 * window.innerWidth) + "px";
+                content.style.transform = `translate(-${0.003 * window.innerWidth}px, -${0.01 * window.innerWidth}px)`;
+            }
+            else {
+                content.style.width = (0.28 * window.innerHeight) + "px";
+                content.style.height = (0.56 * window.innerHeight) + "px";
+                content.style.transform = `translate(-${0.01 * window.innerHeight}px, -${0.003 * window.innerHeight}px)`;
+            }
+        } else {
+            if(window.innerWidth >= window.innerHeight) {
+                content.style.width = (0.58 * window.innerWidth) + "px";
+                content.style.height = (0.35 * window.innerWidth) + "px";
+                content.style.transform = `translate(${0.0035 * window.innerWidth}px, ${0.01 * window.innerWidth}px)`;
+            }
+            else {
+                content.style.width = (0.35 * window.innerHeight) + "px";
+                content.style.height = (0.56 * window.innerHeight) + "px";
+                content.style.transform = `translate(-${0.01 * window.innerHeight}px, -${0.003 * window.innerHeight}px)`;
+            }
         }
     }
 
@@ -61,6 +74,17 @@ export default class Template extends Component {
         this.mounted = true;
     }
 
+    moveToNotes = () => {
+        const newMode = this.state.mode === "tv" ? "notes" : "tv";
+        this.setState({ ready: false, mode: newMode }, () => {
+            const background = document.getElementById("background") as HTMLVideoElement;
+            background.addEventListener("ended", () => {
+                this.resize();
+                this.setState({ ready: true });
+            });
+        });
+    }
+
     render() {
         if (this.state.fullscreen) {
             return (
@@ -70,23 +94,24 @@ export default class Template extends Component {
                         autoHideDuration={2000} 
                         message="Press Escape to exit full screen" 
                         onClose={() => this.setState({ showMessege: false })} />
-                    <App></App>
+                    <App mode={this.state.mode}></App>
                 </>
             );
         }
         return (
             <div>
                 <div id="background-container">
-                    {/* Preload the image */}
+                    {/* Preload assets */}
                     <img src="/scene/3.png" height="100%" style={{ display: "none" }}></img>
+                    <img src="/scene/4.png" height="100%" style={{ display: "none" }}></img>
                     {
                         this.state.ready ? (
-                            <img src="/scene/3.png" height="100%" id="background">
+                            <img src={this.state.mode === "tv" ? "/scene/3.png" : "/scene/4.png"} height="100%" id="background">
 
                             </img>
                         ) : (
                             <video height="100%" id="background" autoPlay muted>
-                                <source src="/scene/start.mkv" type="video/mp4" />
+                                <source src={this.state.mode === "tv" ? "/scene/start.mkv" : "/scene/notes.mkv"} type="video/mp4" />
                             </video>
                         )
                     }
@@ -97,7 +122,7 @@ export default class Template extends Component {
                         style={{ display: this.state.ready ? "block" : "none" }}
                         onMouseOver={() => this.isMouseInsideContent = true}
                         onMouseLeave={() => this.isMouseInsideContent = false}>
-                        <App></App>
+                        <App mode={this.state.mode}></App>
                     </div>
                 </div>
 
@@ -106,6 +131,19 @@ export default class Template extends Component {
                     style={{ backgroundColor: "#11111177" }}
                     onClick={() => this.setState({ fullscreen: !this.state.fullscreen, showMessege: !this.state.showMessege })}>
                     <Fullscreen style={{ color: "white" }}></Fullscreen>
+                </IconButton>
+                <IconButton
+                    id="notes"
+                    style={{ backgroundColor: "#11111177" }}
+                    onClick={this.moveToNotes}>
+                        {
+                            this.state.mode === "tv" ? (
+                                <StickyNote2 style={{ color: "white" }}></StickyNote2>
+                            ) : (
+                                <Tv style={{ color: "white" }}></Tv>
+                            )
+                        }
+                    
                 </IconButton>
             </div>
         )
