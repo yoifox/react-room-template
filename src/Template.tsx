@@ -29,9 +29,16 @@ export default class Template extends Component {
     resize = () => {
         if (this.state.fullscreen) return;
         const content = document.getElementById("content") as HTMLDivElement;
-        content.style.width = (0.56 * window.innerWidth) + "px";
-        content.style.height = (0.28 * window.innerWidth) + "px";
-        content.style.transform = `translate(-${0.003 * window.innerWidth}px, -${0.01 * window.innerWidth}px)`;
+        if(window.innerWidth >= window.innerHeight) {
+            content.style.width = (0.56 * window.innerWidth) + "px";
+            content.style.height = (0.28 * window.innerWidth) + "px";
+            content.style.transform = `translate(-${0.003 * window.innerWidth}px, -${0.01 * window.innerWidth}px)`;
+        }
+        else {
+            content.style.width = (0.28 * window.innerHeight) + "px";
+            content.style.height = (0.56 * window.innerHeight) + "px";
+            content.style.transform = `translate(-${0.01 * window.innerHeight}px, -${0.003 * window.innerHeight}px)`;
+        }
     }
 
     componentDidMount(): void {
