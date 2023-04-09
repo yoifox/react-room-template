@@ -7,12 +7,10 @@ import App from './App';
 export default class Template extends Component {
 
     mounted = false;
-    isMouseInsideContent = false;
     state = { ready: false, fullscreen: false, showMessege: false, mode: "tv" };
 
     move = (e: MouseEvent) => {
         if (this.state.fullscreen) return;
-        if (this.isMouseInsideContent) return;
         const background = document.getElementById("background") as HTMLVideoElement;
         if (!background) return;
         const content = document.getElementById("content") as HTMLDivElement;
@@ -118,21 +116,22 @@ export default class Template extends Component {
                 </div>
                 <div id="content-container">
                     <div
+                        onMouseMove={e => e.stopPropagation()}
                         id="content"
-                        style={{ display: this.state.ready ? "block" : "none" }}
-                        onMouseOver={() => this.isMouseInsideContent = true}
-                        onMouseLeave={() => this.isMouseInsideContent = false}>
+                        style={{ display: this.state.ready ? "block" : "none" }}>
                         <App mode={this.state.mode}></App>
                     </div>
                 </div>
 
                 <IconButton
+                    onMouseMove={e => e.stopPropagation()}
                     id="fullscreen"
                     style={{ backgroundColor: "#11111177" }}
                     onClick={() => this.setState({ fullscreen: !this.state.fullscreen, showMessege: !this.state.showMessege })}>
                     <Fullscreen style={{ color: "white" }}></Fullscreen>
                 </IconButton>
                 <IconButton
+                    onMouseMove={e => e.stopPropagation()}
                     id="notes"
                     style={{ backgroundColor: "#11111177" }}
                     onClick={this.moveToNotes}>
