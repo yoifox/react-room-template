@@ -89,6 +89,12 @@ export default class Template extends Component {
                 }
                 this.resize();
                 this.setState({ ready: true }, () => {
+                    const content = document.getElementById("content") as HTMLDivElement;
+                    if(newMode == "notes") {
+                        content.style.backgroundImage = "url(/scene/notes.png)";
+                    } else {
+                        content.style.backgroundImage = "url(/scene/tv.png)";
+                    }
                     document.body.style.backgroundImage = "url(/scene/tv.png)";
                 });
             });
