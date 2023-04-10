@@ -74,11 +74,23 @@ export default class Template extends Component {
 
     moveToNotes = () => {
         const newMode = this.state.mode === "tv" ? "notes" : "tv";
+        if(newMode == "notes") {
+            document.body.style.backgroundImage = "url(/scene/2.png)";
+        } else {
+            document.body.style.backgroundImage = "url(/scene/4.png)";
+        }
         this.setState({ ready: false, mode: newMode }, () => {
             const background = document.getElementById("background") as HTMLVideoElement;
             background.addEventListener("ended", () => {
+                if(newMode == "notes") {
+                    document.body.style.backgroundImage = "url(/scene/4.png)";
+                } else {
+                    document.body.style.backgroundImage = "url(/scene/2.png)";
+                }
                 this.resize();
-                this.setState({ ready: true });
+                this.setState({ ready: true }, () => {
+                    document.body.style.backgroundImage = "url(/scene/tv.png)";
+                });
             });
         });
     }
@@ -100,6 +112,7 @@ export default class Template extends Component {
             <div>
                 <div id="background-container">
                     {/* Preload assets */}
+                    <img src="/scene/2.png" height="100%" style={{ display: "none" }}></img>
                     <img src="/scene/3.png" height="100%" style={{ display: "none" }}></img>
                     <img src="/scene/4.png" height="100%" style={{ display: "none" }}></img>
                     {
