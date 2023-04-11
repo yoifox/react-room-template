@@ -1,5 +1,7 @@
 # React 3d room tv template
-A basic room scene with tv as UI panel. Made with blender.
+A basic animated room scene with tv as UI panel. Made with blender.
+
+![tv_static_1](https://user-images.githubusercontent.com/104318152/231154683-8ceaeb88-6268-48de-8078-8438654d9d44.png)
 
 ## Getting started
 - `npm install`
