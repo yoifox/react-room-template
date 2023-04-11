@@ -8,6 +8,12 @@ const root = ReactDOM.createRoot(
 );
 root.render(
     <React.StrictMode>
+        {/* Preload assets */}
+        <img src="/scene/notes_bg.png" height="100%" style={{ display: "none" }}></img>
+        <img src="/scene/notes_static.png" height="100%" style={{ display: "none" }}></img>
+        <img src="/scene/tv_bg.png" height="100%" style={{ display: "none" }}></img>
+        <img src="/scene/tv_static.png" height="100%" style={{ display: "none" }}></img>
+        <img src="/scene/tv_static_1.png" height="100%" style={{ display: "none" }}></img>
         <Template />
     </React.StrictMode>
 );
